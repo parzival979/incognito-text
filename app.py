@@ -1,9 +1,37 @@
 from flask import Flask, render_template, request, redirect, url_for
 from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class,go_to_room_class
-
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash,generate_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "whatever123"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myDB.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+db = SQLAlchemy(app)
+
+db.create_all()
+
+
+class user (db.Model):
+    username = db.Column(db.String(32), primary_key=True)
+    password_hash = db.Column(db.String(128), index=False)
+    joined_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+    messages = db.relationship('messages', backref='book', lazy='dynamic')
+
+class room(db.Model):
+    room_id = db.Column(db.String(32), primary_key=True)
+    room_name = db.Column(db.String(100), index=False)
+    created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+    messages = db.relationship('messages', backref='book', lazy='dynamic')
+
+class messages(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    room_id = db.Column(db.String(32), db.ForeignKey('room.room_id'))
+    username = db.Column(db.String(32), db.ForeignKey('user.username'))
+    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+
 
 
 @app.route('/', methods=["GET", "POST"])
