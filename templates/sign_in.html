@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+
+{%  block content %}
+    <form action="/" method="post">
+    {{ sign_in_form.hidden_tag() }}
+    {{ sign_in_form.username_field.label }}
+    {{ sign_in_form.username_field() }}
+    {{ sign_in_form.password_field.label }}
+    {{ sign_in_form.password_field() }}
+    {{ sign_in_form.Sign_in() }}
+    </form>
+
+{% endblock %}

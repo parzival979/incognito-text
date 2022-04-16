@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form action="/" method="post">
+<form action="/sign_in" method="post">
     {{ sign_up_form.hidden_tag() }}
     {{ sign_up_form.username_field.label }}
     {{ sign_up_form.username_field() }}
