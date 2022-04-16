@@ -1,2 +1,2 @@
 # incognito_text
-A Simple,Minimalistic Anyonymous Texting Web App
+A Simple,Minimalistic Anonymous Texting Web App
