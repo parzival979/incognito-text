@@ -2,7 +2,7 @@
 
 {%  block content %}
     <p>Please chose your room id responsibly, anyone with the room id can access the room</p>
-    <form action="/" method="post">
+    <form method="post">
     {{ create_room_form.hidden_tag() }}
     {{ create_room_form.Room_Name_Field.label }}
     {{ create_room_form.Room_Name_Field() }}

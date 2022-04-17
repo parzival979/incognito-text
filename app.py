@@ -1,30 +1,30 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,flash
 from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class,go_to_room_class
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash,generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "whatever123"
+app.config['SECRET_KEY'] = 'whatever123'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myDB.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-db.create_all()
 
-
-class user (db.Model):
+class user(db.Model):
     username = db.Column(db.String(32), primary_key=True)
     password_hash = db.Column(db.String(128), index=False)
     joined_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
-    messages = db.relationship('messages', backref='book', lazy='dynamic')
+    messages = db.relationship('messages', backref='user', lazy='dynamic')
+
 
 class room(db.Model):
     room_id = db.Column(db.String(32), primary_key=True)
     room_name = db.Column(db.String(100), index=False)
     created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
-    messages = db.relationship('messages', backref='book', lazy='dynamic')
+    messages = db.relationship('messages', backref='room', lazy='dynamic')
+
 
 class messages(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -41,29 +41,30 @@ def main():  # put application's code here
 
 @app.route('/sign_up', methods=["GET", "POST"])
 def sign_up():
-    sign_up_form_obj = sign_up_form_class()
-    if sign_up_form_obj.validate_on_submit():
-        pass
-    else:
-        pass
+    sign_up_form_obj = sign_up_form_class(csrf_enabled=False)
+    if sign_up_form_obj.validate_on_submit() and user.query.get(sign_up_form_obj.username_field.data) == None:
+        new_user = user(username=sign_up_form_obj.username_field.data,
+                        password_hash=generate_password_hash(sign_up_form_obj.password_field.data))
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('sign_in'))
     return render_template('sign_up.html', sign_up_form=sign_up_form_obj)
+
 
 
 @app.route('/sign_in', methods=["GET", "POST"])
 def sign_in():
-    sign_in_form_obj = sign_in_form_class()
+    sign_in_form_obj = sign_in_form_class(csrf_enabled = False)
     if sign_in_form_obj.validate_on_submit():
         pass
     else:
         pass
-    return render_template('sign_in.html', sign_in_form=sign_in_form_obj)
+    return render_template("sign_in.html", sign_in_form=sign_in_form_obj)
 
 @app.route('/create_room', methods = ["GET", "POST"])
 def create_room():
-    create_room_form_obj = new_room_class()
+    create_room_form_obj = new_room_class(csrf_enabled=False)
     if create_room_form_obj.validate_on_submit():
-        pass
-    else:
         pass
     return render_template('create_room.html', create_room_form=create_room_form_obj)
 

@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {%  block content %}
-    <form action="/" method="post">
+    <form method="post">
     {{ sign_in_form.hidden_tag() }}
     {{ sign_in_form.username_field.label }}
     {{ sign_in_form.username_field() }}

@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, TextAreaField
-from wtforms.validators import DataRequired, equal_to
+from wtforms.validators import DataRequired,EqualTo
 
 
 class sign_up_form_class(FlaskForm):
     username_field = StringField("Username", validators=[DataRequired()])
     password_field = PasswordField("Password", validators=[DataRequired()])
-    re_enter_password = PasswordField("Re Enter Password",validators=[DataRequired(), equal_to(password_field)])
+    re_enter_password = PasswordField("Re Enter Password",validators=[DataRequired(),EqualTo('password_field')])
     Sign_up = SubmitField("Sign Up")
 
 class sign_in_form_class(FlaskForm):

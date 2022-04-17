@@ -1,6 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
-    <form action="/" method="post">
+    <form  method="post">
     {{ send_message_form.hidden_tag() }}
     {{ send_message_form.message.label }}
     {{ send_message_form.message() }}
