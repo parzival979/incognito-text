@@ -4,10 +4,11 @@ from flask_login import UserMixin, LoginManager, login_required, login_user,logo
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class, go_to_room_class
+from os import environ
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'whatever123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myDB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL') or 'sqlite:///myDB.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
