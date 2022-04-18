@@ -8,7 +8,7 @@ from os import environ
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'whatever123'
-app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///myDB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myDB.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
