@@ -122,7 +122,6 @@ def send_message_in_room(id):
     return render_template('chat_room.html', send_message_form=send_message_form_obj)
 
 
-
 if __name__ == '__main__':
     app.run()
 
