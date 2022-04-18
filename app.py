@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Flask, render_template, redirect, url_for
-from flask_login import UserMixin, LoginManager, login_required, login_user,logout_user
+from flask_login import UserMixin, LoginManager, login_required, login_user,logout_user,current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class, go_to_room_class
@@ -30,7 +30,7 @@ def unauthorized():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main'))
 
 
 class user(db.Model, UserMixin):
@@ -48,10 +48,10 @@ class room(db.Model):
 
 
 class messages(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(1024))
     room_id = db.Column(db.String(32), db.ForeignKey('room.id'), index=True)
     username = db.Column(db.String(32), db.ForeignKey('user.id'), index=True)
-    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow,primary_key=True)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -83,6 +83,8 @@ def sign_in():
         if req_user and check_password_hash(req_user.password_hash, sign_in_form_obj.password_field.data):
             login_user(req_user,remember=sign_in_form_obj.remember.data)
             return redirect(url_for('go_to_room'))
+        else:
+            return login_manager.unauthorized()
     return render_template("sign_in.html", sign_in_form=sign_in_form_obj)
 
 
@@ -102,7 +104,7 @@ def create_room():
     return render_template('create_room.html', create_room_form=create_room_form_obj)
 
 
-@app.route('/go_to_room', methods=["GET", "POST"])
+@app.route('/go_to_room/', methods=["GET", "POST"])
 @login_required
 def go_to_room():
     go_to_room_form_obj = go_to_room_class()
@@ -115,11 +117,15 @@ def go_to_room():
 @login_required
 def send_message_in_room(id):
     send_message_form_obj = send_message_class()
-    if send_message_form_obj.validate_on_submit():
-        pass
-    else:
-        pass
-    return render_template('chat_room.html', send_message_form=send_message_form_obj)
+    if send_message_form_obj.validate_on_submit() and not room.query.get(id) == None:
+        current_message = messages(message = send_message_form_obj.message.data,room_id = id,username=current_user.id)
+        db.session.add(current_message)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            return redirect(url_for('send_message_in_room',id = id))
+    return render_template('chat_room.html', send_message_form=send_message_form_obj,req_messages = messages.query.filter(messages.room_id == id).all())
 
 
 if __name__ == '__main__':

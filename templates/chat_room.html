@@ -1,5 +1,8 @@
 {% extends 'main.html' %}
 {% block content %}
+    {% for message in req_messages %}
+    <br>Id:{{ message.username }},Message:{{ message.message }},Time:{{ message.message_time }}<br>
+    {% endfor %}
     <form  method="post">
     {{ send_message_form.hidden_tag() }}
     {{ send_message_form.message.label }}
