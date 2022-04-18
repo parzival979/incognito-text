@@ -12,24 +12,30 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+
+
 class user(db.Model):
-    username = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.String(32), primary_key=True)
     password_hash = db.Column(db.String(128), index=False)
     joined_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     messages = db.relationship('messages', backref='user', lazy='dynamic')
 
 
 class room(db.Model):
-    room_id = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.String(32), primary_key=True)
     room_name = db.Column(db.String(100), index=False)
     created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     messages = db.relationship('messages', backref='room', lazy='dynamic')
 
+    def __init__(self,id,room_name):
+        self.id=id
+        self.room_name=room_name
+
 
 class messages(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    room_id = db.Column(db.String(32), db.ForeignKey('room.room_id'))
-    username = db.Column(db.String(32), db.ForeignKey('user.username'))
+    room_id = db.Column(db.String(32), db.ForeignKey('room.id'), index=True)
+    username = db.Column(db.String(32), db.ForeignKey('user.id'), index=True)
     message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
 
 
@@ -43,7 +49,7 @@ def main():  # put application's code here
 def sign_up():
     sign_up_form_obj = sign_up_form_class(csrf_enabled=False)
     if sign_up_form_obj.validate_on_submit() and user.query.get(sign_up_form_obj.username_field.data) == None:
-        new_user = user(username=sign_up_form_obj.username_field.data,
+        new_user = user(id=sign_up_form_obj.username_field.data,
                         password_hash=generate_password_hash(sign_up_form_obj.password_field.data))
         db.session.add(new_user)
         db.session.commit()
@@ -61,19 +67,23 @@ def sign_in():
         pass
     return render_template("sign_in.html", sign_in_form=sign_in_form_obj)
 
+
 @app.route('/create_room', methods = ["GET", "POST"])
 def create_room():
-    create_room_form_obj = new_room_class(csrf_enabled=False)
-    if create_room_form_obj.validate_on_submit():
-        pass
+    create_room_form_obj = new_room_class()
+    if create_room_form_obj.validate_on_submit() :
+        new_room = room(id = create_room_form_obj.Room_ID_Field.data,room_name=create_room_form_obj.Room_Name_Field.data)
+        db.session.add(new_room)
+        db.session.commit()
+        return redirect(url_for('go_to_room'))
     return render_template('create_room.html', create_room_form=create_room_form_obj)
+
+
 
 @app.route('/go_to_room', methods = ["GET", "POST"])
 def go_to_room():
     go_to_room_form_obj = go_to_room_class()
     if go_to_room_form_obj.validate_on_submit():
-        pass
-    else:
         pass
     return render_template('Go_to_room.html', go_to_room_form = go_to_room_form_obj)
 
