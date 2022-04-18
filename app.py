@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for,flash
-from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class,go_to_room_class
+from datetime import datetime
+from flask import Flask, render_template, redirect, url_for
+from flask_login import UserMixin, LoginManager, login_required, login_user,logout_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import datetime
+from forms import sign_up_form_class, sign_in_form_class, new_room_class, send_message_class, go_to_room_class
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'whatever123'
@@ -11,10 +12,28 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+db.create_all()
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return user.query.get(user_id)
 
-class user(db.Model):
+@login_manager.unauthorized_handler
+def unauthorized():
+  return "Sorry you must be logged in to view this page"
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+class user(db.Model, UserMixin):
     id = db.Column(db.String(32), primary_key=True)
     password_hash = db.Column(db.String(128), index=False)
     joined_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
@@ -27,17 +46,12 @@ class room(db.Model):
     created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     messages = db.relationship('messages', backref='room', lazy='dynamic')
 
-    def __init__(self,id,room_name):
-        self.id=id
-        self.room_name=room_name
-
 
 class messages(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.String(32), db.ForeignKey('room.id'), index=True)
     username = db.Column(db.String(32), db.ForeignKey('user.id'), index=True)
     message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
-
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -52,53 +66,64 @@ def sign_up():
         new_user = user(id=sign_up_form_obj.username_field.data,
                         password_hash=generate_password_hash(sign_up_form_obj.password_field.data))
         db.session.add(new_user)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            return redirect(url_for('sign_up'))
         return redirect(url_for('sign_in'))
     return render_template('sign_up.html', sign_up_form=sign_up_form_obj)
 
 
-
 @app.route('/sign_in', methods=["GET", "POST"])
 def sign_in():
-    sign_in_form_obj = sign_in_form_class(csrf_enabled = False)
+    sign_in_form_obj = sign_in_form_class(csrf_enabled=False)
     if sign_in_form_obj.validate_on_submit():
-        pass
-    else:
-        pass
+        req_user = user.query.get(sign_in_form_obj.username_field.data)
+        if req_user and check_password_hash(req_user.password_hash, sign_in_form_obj.password_field.data):
+            login_user(req_user,remember=sign_in_form_obj.remember.data)
+            return redirect(url_for('go_to_room'))
     return render_template("sign_in.html", sign_in_form=sign_in_form_obj)
 
 
-@app.route('/create_room', methods = ["GET", "POST"])
+@app.route('/create_room', methods=["GET", "POST"])
+@login_required
 def create_room():
     create_room_form_obj = new_room_class()
-    if create_room_form_obj.validate_on_submit() :
-        new_room = room(id = create_room_form_obj.Room_ID_Field.data,room_name=create_room_form_obj.Room_Name_Field.data)
+    if create_room_form_obj.validate_on_submit() and room.query.get(create_room_form_obj.Room_ID_Field.data) == None:
+        new_room = room(id=create_room_form_obj.Room_ID_Field.data, room_name=create_room_form_obj.Room_Name_Field.data)
         db.session.add(new_room)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            return redirect(url_for('create_room'))
         return redirect(url_for('go_to_room'))
     return render_template('create_room.html', create_room_form=create_room_form_obj)
 
 
-
-@app.route('/go_to_room', methods = ["GET", "POST"])
+@app.route('/go_to_room', methods=["GET", "POST"])
+@login_required
 def go_to_room():
     go_to_room_form_obj = go_to_room_class()
-    if go_to_room_form_obj.validate_on_submit():
-        pass
-    return render_template('Go_to_room.html', go_to_room_form = go_to_room_form_obj)
+    if go_to_room_form_obj.validate_on_submit() and not room.query.get(go_to_room_form_obj.Room_ID_Field.data) == None:
+        return redirect(url_for('send_message_in_room', id=go_to_room_form_obj.Room_ID_Field.data))
+    return render_template('Go_to_room.html', go_to_room_form=go_to_room_form_obj)
 
 
-
-@app.route('/room/<string:id>', methods = ["GET", "POST"])
-def room(id):
+@app.route('/room/<string:id>', methods=["GET", "POST"])
+@login_required
+def send_message_in_room(id):
     send_message_form_obj = send_message_class()
     if send_message_form_obj.validate_on_submit():
         pass
     else:
         pass
-    return render_template('chat_room.html', send_message_form = send_message_form_obj)
+    return render_template('chat_room.html', send_message_form=send_message_form_obj)
 
 
 
 if __name__ == '__main__':
     app.run()
+
+
