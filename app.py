@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for,request
 from flask_login import UserMixin, LoginManager, login_required, login_user,logout_user,current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -8,7 +8,7 @@ from os import environ
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'whatever123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myDB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL') or 'sqlite:///myDB.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -52,7 +52,7 @@ class messages(db.Model):
     message = db.Column(db.String(1024))
     room_id = db.Column(db.String(32), db.ForeignKey('room.id'), index=True)
     username = db.Column(db.String(32), db.ForeignKey('user.id'), index=True)
-    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow,primary_key=True)
+    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow(),primary_key=True)
 
 
 @app.route('/', methods=["GET", "POST"])

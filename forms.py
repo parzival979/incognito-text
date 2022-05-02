@@ -25,6 +25,6 @@ class go_to_room_class(FlaskForm):
     go_to_room = SubmitField("Go To Room")
 
 class send_message_class(FlaskForm):
-    message = TextAreaField("Type Your Message", validators=[DataRequired()])
+    message = TextAreaField("Type Your Message")
     Send_message = SubmitField("Send")
 
