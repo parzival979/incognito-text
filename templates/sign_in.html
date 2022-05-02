@@ -6,17 +6,17 @@
     {{ sign_in_form.hidden_tag() }}
     {{ sign_in_form.username_field.label }}
     <br>
-    {{ sign_in_form.username_field(style="width:100%;") }}
+    {{ sign_in_form.username_field(class='labels') }}
     <br> <br>
     {{ sign_in_form.password_field.label }}
     <br>
-    {{ sign_in_form.password_field(style="width:100%;") }}
+    {{ sign_in_form.password_field(class='labels') }}
     <br> <br>
     {{ sign_in_form.remember.label }}
     {{ sign_in_form.remember() }}
     <br>
-    {{ sign_in_form.Sign_in() }}
+    {{ sign_in_form.Sign_in(class='button') }}
     <br> <br>
-    <h5>Don't have an account, click here to <a href="{{ url_for('sign_up')}}">Sign up</a></h5>
+    <h6>Don't have an account, click here to <a href="{{ url_for('sign_up')}}">Sign up</a></h6>
     </form>
 {% endblock %}

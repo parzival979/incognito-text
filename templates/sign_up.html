@@ -6,17 +6,17 @@
     {{ sign_up_form.hidden_tag() }}
     {{ sign_up_form.username_field.label }}
     <br>
-    {{ sign_up_form.username_field() }}
-    <br> <br>
+    {{ sign_up_form.username_field(class='labels') }}
+    <br>
     {{ sign_up_form.password_field.label }}
     <br>
-    {{ sign_up_form.password_field() }}
-    <br> <br>
+    {{ sign_up_form.password_field(class='labels') }}
+    <br> 
     {{ sign_up_form.re_enter_password.label }}
     <br>
-    {{ sign_up_form.re_enter_password() }}
-    <br> <br>
-    {{ sign_up_form.Sign_up() }}
+    {{ sign_up_form.re_enter_password(class='labels') }}
+    <br>
+    {{ sign_up_form.Sign_up(class='button') }}
 </form>
 {% endblock %}
 

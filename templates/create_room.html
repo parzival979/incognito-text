@@ -2,14 +2,20 @@
 
 {%  block content %}
 <br><br>
-    <p>Please chose your room id responsibly, anyone with the room id can access the room</p>
-    <form method="POST">
-    {{ create_room_form.hidden_tag() }}
-    {{ create_room_form.Room_Name_Field.label }}
-    {{ create_room_form.Room_Name_Field() }}
-    {{ create_room_form.Room_ID_Field.label }}
-    {{ create_room_form.Room_ID_Field() }}
-    {{ create_room_form.Create_Room() }}
-    </form>
+    <div class="create_room">
+        <form method="POST">
+        {{ create_room_form.hidden_tag() }}
+        {{ create_room_form.Room_Name_Field.label }}
+        <br>
+        {{ create_room_form.Room_Name_Field(style= 'width:100%;',class='labels') }}
+        <br>
+        {{ create_room_form.Room_ID_Field.label }}
+        <br>
+        {{ create_room_form.Room_ID_Field(style= 'width:100%;',class='labels') }}
+        <br>
+        {{ create_room_form.Create_Room(class='button') }}
+        </form>
+    </div>
+    
 
 {% endblock %}
