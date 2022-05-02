@@ -1,5 +1,5 @@
 from datetime import datetime,timedelta
-from flask import Flask, render_template, redirect, url_for,request
+from flask import Flask, render_template, redirect, url_for,request,flash
 from flask_login import UserMixin, LoginManager, login_required, login_user,logout_user,current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -29,7 +29,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-  return "Sorry you must be logged in to view this page"
+  return render_template('error.html')
 
 @app.route("/logout")
 @login_required
@@ -78,6 +78,8 @@ def sign_up():
             db.session.rollback()
             return redirect(url_for('sign_up'))
         return redirect(url_for('sign_in'))
+    else:
+        flash('Invalid Choice Of Credentials')
     return render_template('sign_up.html', sign_up_form=sign_up_form_obj)
 
 
@@ -90,6 +92,7 @@ def sign_in():
             login_user(req_user,remember=sign_in_form_obj.remember.data)
             return redirect(url_for('go_to_room'))
         else:
+            flash('Invalid Credentials')
             return login_manager.unauthorized()
     return render_template("sign_in.html", sign_in_form=sign_in_form_obj)
 
@@ -107,6 +110,8 @@ def create_room():
             db.session.rollback()
             return redirect(url_for('create_room'))
         return redirect(url_for('go_to_room'))
+    else:
+        flash('Chat Room Already Exists')
     return render_template('create_room.html', create_room_form=create_room_form_obj)
 
 
@@ -116,6 +121,8 @@ def go_to_room():
     go_to_room_form_obj = go_to_room_class()
     if go_to_room_form_obj.validate_on_submit() and not room.query.get(go_to_room_form_obj.Room_ID_Field.data) == None:
         return redirect(url_for('send_message_in_room', id=go_to_room_form_obj.Room_ID_Field.data))
+    else:
+        flash('Chat Room Does Not Exist')
     return render_template('Go_to_room.html', go_to_room_form=go_to_room_form_obj)
 
 
