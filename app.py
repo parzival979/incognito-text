@@ -29,7 +29,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-  return "Sorry you must be logged in to view this page"
+  return render_template('error.html')
 
 @app.route("/logout")
 @login_required
