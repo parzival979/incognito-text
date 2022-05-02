@@ -156,10 +156,41 @@
           color:whitesmoke;
         }
         .send_msg{
-          position:absolute; bottom:0;
+          position:fixed; bottom:0;
           width:100%;
         }
-
+        .print_msg{
+          overflow: auto;
+          overflow-x: hidden;
+          scrollbar-width: thin;
+          margin: 10px;
+          line-height: 1.5em;
+          font-family: 'Poppins', sans-serif;
+          margin-bottom: 50px;
+          max-height: 510px;
+          
+        }
+        #time_msg{
+          font-size: 0.85em;
+          position: fixed;
+          padding-left:85%;
+        }
+        #msg{
+          line-height: 1 !important;
+          margin:5px;
+          float: left !important;
+        }
+        #userId{
+          margin:2px;
+          font-weight: bold;
+        }
+        .inner{
+          border:2px solid whitesmoke;
+          margin-bottom: 5px;
+        }
+        .send_msg{
+          font-family: 'Poppins', sans-serif;
+        }
     </style>
 </head>
 <body>
