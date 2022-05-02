@@ -130,6 +130,11 @@ def send_message_in_room(id):
         return redirect(url_for('send_message_in_room',id = id))
     return render_template('chat_room.html', send_message_form=send_message_form_obj,req_messages = messages.query.filter(messages.room_id == id).all())
 
+@app.template_filter('formatdatetime')
+def format_datetime(value, format="%I:%M %p %d %b %Y"):
+    if value is None:
+        return ""
+    return value.strftime(format)
 
 if __name__ == '__main__':
     app.run()
