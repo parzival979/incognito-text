@@ -24,6 +24,7 @@
         }
         .typing{
           color: rgba(255, 255, 255, 0.615);
+          text-align:center;
         }
         .button:hover {
           background-position:-400px;  
@@ -195,6 +196,65 @@
           position: absolute;
           left: 25%; top:30%;
           color:rgba(245, 245, 245, 0.654);
+        }
+        #IT{
+          font-size: clamp(1rem, 3vw + 1rem, 4rem);
+          position: relative;
+          font-family: "Source Code Pro", monospace;
+          position: relative;
+          width: max-content;
+          display: inline-block;
+          text-align: left;
+        }
+
+        :root {
+        --bg-color: rgb(0, 0, 0);
+        --typewriterSpeed: 4s;
+        --typewriterCharacters: 24;
+      }
+
+        #IT::before,
+        #IT::after{
+          content: "";
+          position: absolute;
+          text-align: center;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+
+        }
+
+        #IT::before {
+          background: var(--bg-color);
+          animation: typewriter var(--typewriterSpeed)
+            steps(var(--typewriterCharacters)) 1s forwards;
+        }
+
+        #IT::after {
+          width: 0.125em;
+          background: rgb(255, 255, 255);
+          animation: typewriter var(--typewriterSpeed)
+              steps(var(--typewriterCharacters)) 1s forwards,
+            blink 750ms steps(var(--typewriterCharacters)) infinite;
+        }
+        @keyframes typewriter {
+          to {
+            left: 100%;
+          }
+        }
+
+        @keyframes blink {
+          to {
+            background: transparent;
+          }
+        }
+
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
     </style>
 </head>
