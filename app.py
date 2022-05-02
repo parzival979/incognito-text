@@ -124,8 +124,7 @@ def go_to_room():
 def send_message_in_room(id):
     send_message_form_obj = send_message_class()
     if send_message_form_obj.validate_on_submit() and not room.query.get(id) == None:
-        print(send_message_form_obj.message.data)
-        current_message = messages(message = send_message_form_obj.message.data,room_id = id,username=current_user.id)
+        current_message = messages(message = send_message_form_obj.message.data,room_id = id,username=current_user.id,message_time = datetime.utcnow())
         db.session.add(current_message)
         db.session.commit()
         return redirect(url_for('send_message_in_room',id = id))
