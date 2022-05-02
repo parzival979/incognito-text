@@ -2,19 +2,21 @@
 
 {%  block content %}
     <br><br>
-    <form method="post">
+    <form method="post" class="sign_in">
     {{ sign_in_form.hidden_tag() }}
     {{ sign_in_form.username_field.label }}
     <br>
-    {{ sign_in_form.username_field() }}
-    <br>
+    {{ sign_in_form.username_field(style="width:100%;") }}
+    <br> <br>
     {{ sign_in_form.password_field.label }}
     <br>
-    {{ sign_in_form.password_field() }}
+    {{ sign_in_form.password_field(style="width:100%;") }}
+    <br> <br>
+    {{ sign_in_form.remember.label }}
+    {{ sign_in_form.remember() }}
     <br>
-        {{ sign_in_form.remember.label }}
-        {{ sign_in_form.remember() }}
     {{ sign_in_form.Sign_in() }}
-    </form>
+    <br> <br>
     <h5>Don't have an account, click here to <a href="{{ url_for('sign_up')}}">Sign up</a></h5>
+    </form>
 {% endblock %}
