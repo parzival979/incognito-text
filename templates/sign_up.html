@@ -1,16 +1,20 @@
 {% extends "main.html" %}
 
 {% block content %}
-
+<br><br>
 <form method="POST">
     {{ sign_up_form.hidden_tag() }}
-    <p>{{ sign_up_form.username_field.label }}
-        {{ sign_up_form.username_field() }}</p>
-    <p>{{ sign_up_form.password_field.label }}
-        {{ sign_up_form.password_field() }}</p>
-    <p>{{ sign_up_form.re_enter_password.label }}
-        {{ sign_up_form.re_enter_password() }}</p>
-    <p>{{ sign_up_form.Sign_up() }}</p>
+    {{ sign_up_form.username_field.label }}
+    <br>
+        {{ sign_up_form.username_field() }}
+    {{ sign_up_form.password_field.label }}
+        <br>
+        {{ sign_up_form.password_field() }}
+    {{ sign_up_form.re_enter_password.label }}
+        <br>
+        {{ sign_up_form.re_enter_password() }}
+        <br>
+    {{ sign_up_form.Sign_up() }}
 </form>
 {% endblock %}
 

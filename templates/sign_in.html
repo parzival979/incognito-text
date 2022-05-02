@@ -1,15 +1,20 @@
 {% extends 'main.html' %}
 
 {%  block content %}
+    <br><br>
     <form method="post">
     {{ sign_in_form.hidden_tag() }}
     {{ sign_in_form.username_field.label }}
+    <br>
     {{ sign_in_form.username_field() }}
+    <br>
     {{ sign_in_form.password_field.label }}
+    <br>
     {{ sign_in_form.password_field() }}
+    <br>
         {{ sign_in_form.remember.label }}
         {{ sign_in_form.remember() }}
     {{ sign_in_form.Sign_in() }}
     </form>
-
+    <h5>Don't have an account, click here to <a href="{{ url_for('sign_up')}}">Sign up</a></h5>
 {% endblock %}
