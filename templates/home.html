@@ -3,8 +3,10 @@
 {% block content %}
 <br><br><br><br><br><br>
       <div class="typing">
-        <h1 style="text-align:center;">Incognito Text</h1>
+        <h1 style="text-align:center; color:white;">Incognito Text</h1>
         <br>
-        <h2 style="text-align:center;">A Simple,Minimalistic Anonymous Texting Web App</h2>
+        <h2 style="text-align:center; ">A Simple,Minimalistic Anonymous Texting Web App</h2>
       </div>
+      <a class="links1" aria-current="page" href="{{ url_for('sign_up')}}">Sign up</a>
+      <a class="links2" href="{{ url_for('sign_in')}}">Sign In</a>
 {% endblock %}

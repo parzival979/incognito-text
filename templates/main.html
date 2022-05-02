@@ -115,6 +115,47 @@
           border: 5px solid whitesmoke;
           border-radius: 10px;
         }
+        .chat_room{
+          color: rgba(255, 255, 255, 0.515);
+
+        }
+        #send_message{
+          position: relative; bottom:0;
+        }
+        .send_msg{
+          position: relative; bottom:0;
+        }
+        .links1{
+          position: absolute;
+          font-size:2em;
+          left:35%; top:60%;
+          text-decoration: none;
+          background: #007bb5;
+            color: white;
+            padding:7px;
+            transition: all 300ms ease-in-out;
+            box-shadow: 5px 5px grey;
+        }
+        .links2{
+          position: absolute;
+          font-size:2em;
+          left:55%; top:60%;
+          text-decoration: none;
+          background: #007bb5;
+            color: white;
+            padding:7px;
+            transition: all 300ms ease-in-out;
+            box-shadow: 5px 5px grey;
+        }
+        .links1:hover{
+          background:white;color: #007bb5;
+          transform: scale(1.25);
+        }
+        .links2:hover{
+          background:white;color: #007bb5;
+          transform: scale(1.25);
+        }
+
     </style>
 </head>
 <body>
@@ -141,11 +182,13 @@
               </li>
             </ul>
             <form class="d-flex">
-              <button class="btn" type="submit" id="logout"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-power-off" style="font-size:24px;"></i></a></button>
+              <a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-power-off" style="font-size:24px;"></i></a>
             </form>
           </div>
         </div>
       </nav>
+      
+
     {% block content%}{% endblock %}
 </header>
 </body>

@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <div class="error">
+        <h1>Sorry some error has occured</h1>
+        <h5>Some reasons for error:
+        <br>
+        <ul>
+            <li>Trying to join room without logging in or without creating an account.</li>
+            <li>Trying to create room without logging in or without creating an account.</li>
+            <li>Trying to log out without logging in or without creating an account.</li>
+        </ul></h5>
+    </div>
+{% endblock %}

@@ -1,12 +1,17 @@
 {% extends 'main.html' %}
 {% block content %}
-    {% for message in req_messages %}
-    <br>Id:{{ message.username }},Message:{{ message.message }},Time:{{ message.message_time }}<br>
-    {% endfor %}
-    <form  method="post">
-    {{ send_message_form.hidden_tag() }}
-    {{ send_message_form.message.label }}
-    {{ send_message_form.message() }}
-    {{ send_message_form.Send_message() }}
-    </form>
+    <div class="chat_room">
+        {% for message in req_messages %}
+        <br>Id:{{ message.username }},Message:{{ message.message }},Time:{{ message.message_time }}<br>
+        {% endfor %}
+        <form  method="post">
+        {{ send_message_form.hidden_tag() }}
+        <div class="s">
+            {{ send_message_form.message.label }}
+            {{ send_message_form.message(class='send_msg') }}
+            {{ send_message_form.Send_message() }}
+        </div>
+        </form>
+    </div>
+    
 {% endblock %}
