@@ -1,6 +1,7 @@
 {% extends 'main.html' %}
 
 {%  block content %}
+<br><br>
     <p>Please chose your room id responsibly, anyone with the room id can access the room</p>
     <form method="POST">
     {{ create_room_form.hidden_tag() }}
