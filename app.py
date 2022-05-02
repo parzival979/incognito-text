@@ -18,7 +18,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-db.create_all()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -54,10 +53,11 @@ class room(db.Model):
 
 
 class messages(db.Model):
+    id = db.Column(db.INTEGER,primary_key=True)
     message = db.Column(db.String(1024))
     room_id = db.Column(db.String(32), db.ForeignKey('room.id'), index=True)
     username = db.Column(db.String(32), db.ForeignKey('user.id'), index=True)
-    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow(),primary_key=True)
+    message_time = db.Column(db.DateTime(), index=True, default=datetime.utcnow())
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -127,11 +127,8 @@ def send_message_in_room(id):
         print(send_message_form_obj.message.data)
         current_message = messages(message = send_message_form_obj.message.data,room_id = id,username=current_user.id)
         db.session.add(current_message)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-            return redirect(url_for('send_message_in_room',id = id))
+        db.session.commit()
+        return redirect(url_for('send_message_in_room',id = id))
     return render_template('chat_room.html', send_message_form=send_message_form_obj,req_messages = messages.query.filter(messages.room_id == id).all())
 
 
