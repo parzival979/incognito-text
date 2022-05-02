@@ -6,11 +6,11 @@
         {% endfor %}
         <form  method="post">
         {{ send_message_form.hidden_tag() }}
-        <div class="s">
-            {{ send_message_form.message.label }}
-            {{ send_message_form.message(class='send_msg') }}
-            {{ send_message_form.Send_message() }}
+        <div class="send_msg">
+            {{ send_message_form.message(style="width:95%; height:5%; border-radius:20px;",placeholder = "  Type your message here") }}
+            {{ send_message_form.Send_message(style="position:relative;bottom:15px; height:40px;") }}
         </div>
+        
         </form>
     </div>
     
