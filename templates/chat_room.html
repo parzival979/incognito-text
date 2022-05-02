@@ -1,9 +1,14 @@
 {% extends 'main.html' %}
 {% block content %}
     <div class="chat_room">
-        {% for message in req_messages %}
-        <br>Id:{{ message.username }},Message:{{ message.message }},{{ message.message_time|formatdatetime }}<br>
-        {% endfor %}
+        <div class="print_msg">
+            {% for message in req_messages %}
+            <div class="inner">
+                <br><p id="userId">{{ message.username.capitalize()}}</p>
+                <p id="msg">{{ message.message }}</p>  <p id="time_msg">{{ message.message_time|formatdatetime }}</p><br>
+            </div>
+            {% endfor %}
+        </div>
         <form  method="post">
         {{ send_message_form.hidden_tag() }}
         <div class="send_msg">
@@ -13,5 +18,4 @@
         
         </form>
     </div>
-    
 {% endblock %}
