@@ -1,10 +1,15 @@
 {% extends 'main.html' %}
 {% block content %}
 <br><br>
-    <form method="post">
-    {{ go_to_room_form.hidden_tag() }}
-    {{ go_to_room_form.Room_ID_Field.label }}
-    {{ go_to_room_form.Room_ID_Field() }}
-    {{ go_to_room_form.go_to_room() }}
-    </form>
+    <div class="go_to_room">
+        <form method="post">
+        {{ go_to_room_form.hidden_tag() }}
+        {{ go_to_room_form.Room_ID_Field.label }}
+        <br>
+        {{ go_to_room_form.Room_ID_Field(class='labels') }}
+        <br>
+        {{ go_to_room_form.go_to_room(class='button') }}
+        </form>
+    </div>
+    
 {% endblock %}
