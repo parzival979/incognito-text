@@ -68,18 +68,18 @@ def main():  # put application's code here
 @app.route('/sign_up', methods=["GET", "POST"])
 def sign_up():
     sign_up_form_obj = sign_up_form_class(csrf_enabled=False)
-    if sign_up_form_obj.validate_on_submit() and user.query.get(sign_up_form_obj.username_field.data) == None:
-        new_user = user(id=sign_up_form_obj.username_field.data,
-                        password_hash=generate_password_hash(sign_up_form_obj.password_field.data))
-        db.session.add(new_user)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-            return redirect(url_for('sign_up'))
-        return redirect(url_for('sign_in'))
-    else:
-        flash('Invalid Choice Of Credentials')
+    if sign_up_form_obj.validate_on_submit():
+        if user.query.get(sign_up_form_obj.username_field.data) == None:
+            new_user = user(id=sign_up_form_obj.username_field.data,password_hash=generate_password_hash(sign_up_form_obj.password_field.data))
+            db.session.add(new_user)
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
+                return redirect(url_for('sign_up'))
+            return redirect(url_for('sign_in'))
+        else:
+            flash('Invalid Choice Of Credentials')
     return render_template('sign_up.html', sign_up_form=sign_up_form_obj)
 
 
@@ -101,17 +101,18 @@ def sign_in():
 @login_required
 def create_room():
     create_room_form_obj = new_room_class()
-    if create_room_form_obj.validate_on_submit() and room.query.get(create_room_form_obj.Room_ID_Field.data) == None:
-        new_room = room(id=create_room_form_obj.Room_ID_Field.data, room_name=create_room_form_obj.Room_Name_Field.data)
-        db.session.add(new_room)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-            return redirect(url_for('create_room'))
-        return redirect(url_for('go_to_room'))
-    else:
-        flash('Chat Room Already Exists')
+    if create_room_form_obj.validate_on_submit() :
+        if room.query.get(create_room_form_obj.Room_ID_Field.data) == None:
+            new_room = room(id=create_room_form_obj.Room_ID_Field.data, room_name=create_room_form_obj.Room_Name_Field.data)
+            db.session.add(new_room)
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
+                return redirect(url_for('create_room'))
+            return redirect(url_for('go_to_room'))
+        else:
+            flash('Chat Room Already Exists')
     return render_template('create_room.html', create_room_form=create_room_form_obj)
 
 
@@ -119,10 +120,11 @@ def create_room():
 @login_required
 def go_to_room():
     go_to_room_form_obj = go_to_room_class()
-    if go_to_room_form_obj.validate_on_submit() and not room.query.get(go_to_room_form_obj.Room_ID_Field.data) == None:
-        return redirect(url_for('send_message_in_room', id=go_to_room_form_obj.Room_ID_Field.data))
-    else:
-        flash('Chat Room Does Not Exist')
+    if go_to_room_form_obj.validate_on_submit():
+        if not room.query.get(go_to_room_form_obj.Room_ID_Field.data) == None:
+            return redirect(url_for('send_message_in_room', id=go_to_room_form_obj.Room_ID_Field.data))
+        else:
+            flash('Chat Room Does Not Exist')
     return render_template('Go_to_room.html', go_to_room_form=go_to_room_form_obj)
 
 
@@ -130,7 +132,7 @@ def go_to_room():
 @login_required
 def send_message_in_room(id):
     send_message_form_obj = send_message_class()
-    if send_message_form_obj.validate_on_submit() and not room.query.get(id) == None:
+    if send_message_form_obj.validate_on_submit() and not room.query.get(id) == None and len(send_message_form_obj.message.data)!=0:
         current_message = messages(message = send_message_form_obj.message.data,room_id = id,username=current_user.id,message_time = datetime.utcnow() + timedelta(hours=5,minutes=30))
         db.session.add(current_message)
         db.session.commit()

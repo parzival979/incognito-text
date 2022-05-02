@@ -16,7 +16,6 @@ class sign_in_form_class(FlaskForm):
     Sign_in = SubmitField("Sign In")
 
 
-
 class new_room_class(FlaskForm):
     Room_ID_Field = StringField("Enter New Room Id", validators=[DataRequired()])
     Room_Name_Field = StringField("Enter Room Name", validators=[DataRequired()])
