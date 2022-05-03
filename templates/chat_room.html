@@ -1,5 +1,8 @@
 {% extends 'main.html' %}
 {% block content %}
+    <div class="details">
+        <p style="color:rgba(245, 245, 245, 0.92); text-align: center;"><strong>RoomName</strong>   #RoomID</p>
+    </div>
     <div class="chat_room">
         <div class="print_msg">
             {% for message in req_messages %}
