@@ -137,7 +137,7 @@ def send_message_in_room(id):
         db.session.add(current_message)
         db.session.commit()
         return redirect(url_for('send_message_in_room',id = id))
-    return render_template('chat_room.html', send_message_form=send_message_form_obj,req_messages = messages.query.filter(messages.room_id == id).all())
+    return render_template('chat_room.html', send_message_form=send_message_form_obj,req_messages = messages.query.filter(messages.room_id == id).all(),id=id,name = room.query.get(id).room_name)
 
 @app.template_filter('formatdatetime')
 def format_datetime(value, format="%I:%M %p %d %b %Y"):
