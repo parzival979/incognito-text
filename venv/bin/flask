@@ -1,4 +1,4 @@
-#!/Users/parzival979/Documents/GitHub/incognito_text/venv/bin/python
+#!/Users/parzival979/Documents/GitHub/incognito-text/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
