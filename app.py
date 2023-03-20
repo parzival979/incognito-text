@@ -148,4 +148,3 @@ def format_datetime(value, format="%I:%M %p %d %b %Y"):
 if __name__ == '__main__':
     app.run()
 
-

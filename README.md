@@ -1,7 +1,7 @@
 # incognito_text
 
 ### A Simple,Minimalistic Anonymous Texting Web App
-#### Web App URL : https://floating-citadel-41872.herokuapp.com/
+#### Web App URL : http://54.160.115.149:8080/
 
 ### Build Time : 10-15 Hours
 
@@ -11,6 +11,4 @@
 - HTML
 - CSS
 
-### Deployed on Heroku
-
-### Project Not Under active development
+### Deployed on AWS EC2
