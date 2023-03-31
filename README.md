@@ -1,7 +1,7 @@
 # incognito_text
 
 ### A Simple,Minimalistic Anonymous Texting Web App
-#### Web App URL : http://54.160.115.149:8080/
+#### Web App URL : http://35.153.17.204:8080
 
 ### Build Time : 10-15 Hours
 
